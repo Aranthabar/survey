@@ -1,0 +1,39 @@
+#page1
+{
+  background-color:white;
+}
+
+.ui-page .ui-header {
+  background: rgb(150,0,0) !important;
+  font-size:150%;
+  padding:10px;
+}
+
+.ui-page .ui-footer {
+  background: rgb(120,120,120) !important;
+  text-align:center;
+  padding:10px;
+}
+
+#main
+{
+  max-width: 1000px;
+  margin:auto;
+}
+
+
+h1 
+{ 
+    color: white; 
+    margin:10px;
+    text-shadow: none !important;
+}
+
+p {
+  font-size: 120%;
+}
+
+
+
+
+
