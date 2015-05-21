@@ -6,17 +6,83 @@
 
 Below is a list of actions that must be completed in order to be production ready (at least beta level).  Once one is completed, it can be lined out.  Lineout is done through two consecutive ~ symbols on each side of the block of text.  ~~example~~.
 
+## Administrative
+
  1. Determine a productive file structure
- 2. Track session cookies
- 3. Enforce timeout??
- 2. User Authentication (installation of `mod_auth_ntlm_winbind` on the server)
- 3. Store User Answer
- 4. Recall User Answer
- 5. Update User Answer
- 6. Establish a file to generate a database and the associated tables with defaults
- 7. Read Questions from Database
- 8. Perform logic for question tree
- 9. Base screen update on AJAX backend
+ 2. Establish a file to generate a database and the associated tables with defaults
+
+## Infrastructure
+
+ 1. Track session cookies
+ 2. Enforce timeout??
+ 3. User Authentication (installation of `mod_auth_ntlm_winbind` on the server)
+ 4. Perform logic for question tree
+ 5. Base screen update on AJAX backend
+ 6. Author a function to get the status of all questions the user might need to answer and then flag each as answered(green)/unanswered(red)/na(dray grey)/unknown(light grey)
+ 7. Write code to allow the user to add a new previously unknown project to the system (???)
+
+## User Interaction
+
+ 1. Store User Answer
+ 2. Recall User Answer
+ 3. Update User Answer
+ 4. Read Questions from Database
+ 5. Author a function to generate the required HTML for the sidebar to display the status
+ 6. Setup the sidebar to have links to the questions
+ 7. Author a function extract a particular question from the database and format the HTML code for display
+ 8. Write the code for the **next** / **save** button on the page which would transmit the results to the database and initiate the pull for the next question.
+ 9. Compose a landing page where the user can select which project he or she wants to fill in.
+
+# Database Structure
+
+## Tables
+
+This is largely a rehash of the current structure of the database but I have done it from free mind (not looking at the current structure) and have added the ability to have heiarchical questions and strict question and radio option orders.
+
+Only thing this can not handle right now is a checkbox style question.  Although it is very similar to the radio option, the answer can be a multiple.  One possible way to handle that style of question is to just store the numbers of the results in a comma delimited list in the answer field.  That can always be reparsed in the future.
+
+### `survey`
+| Field | Description |
+|-------|-------------|
+| id | Unique id to use as primary key |
+| name | Textual name of the survey |
+| year | Year the survey was issued |
+| initialquestion | Id of the initial question to ask |
+
+### `projects`
+| Field | Description |
+|-------|-------------|
+| id | Unique id field to act as the primary key |
+| name | Name of the project |
+
+### `questions`
+| Field | Description |
+|-------|-------------|
+| id | Unique question id field to act as the primary key
+| survey | Id to the survey |
+| parent | A link to the id of the parent field |
+| order | A numeric field indicating the order the quetion should be asked (In the event the parent is the same for multiple questions) |
+| type | Type of question.  Options are `radio` and `text` |
+| label | Text passed to the web page for display |
+
+### `questions_radio_options`
+| Field | Description |
+|-------|-------------|
+| id  | Unique id to track as the primary key |
+| questionid | Link to the question id |
+| order | Order the option would show in (This would also be the result of the question) |
+| label | The text displayed to the user |
+
+### `answers`
+| Field | Description |
+|-------|-------------|
+| id | Unique id to track as the primary key |
+| username | Name of the user answering the question |
+| projectid | Link to the project the question is targeted for |
+| questionid | Link to the question id |
+| surveyid | Link to the survey id (Not really needed since I could get that through the questionid) |
+| answer | Answer from the site.  Always stored as text.  Numbers for the radio type questions can be reconverted |
+| date | Datetime that the question was answered |
 
 # General Thoughts
 
@@ -25,6 +91,9 @@ Below is a list of actions that must be completed in order to be production read
  1. Alter the questions table to have a heiarchical structure (parent / children)
  2. Alter the answers table to store the username and not the user id from the user table
  3. Remove the users table as we will likely not need it since we can use NTLM for auth
+ 4. Add question category to the question table
+
+The question category section is so that we can have a sidebar on the web page that denotes which 
 
 ## Project file structure
 
