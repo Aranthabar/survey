@@ -77,9 +77,6 @@ Only thing this can not handle right now is a checkbox style question.  Although
 | Field | Description |
 |-------|-------------|
 | id | Unique question id field to act as the primary key
-| survey | Id to the survey |
-| parent | A link to the id of the parent field |
-| order | A numeric field indicating the order the quetion should be asked (In the event the parent is the same for multiple questions) |
 | type | Type of question.  Options are `radio` and `text` |
 | label | Text passed to the web page for display |
 
@@ -90,6 +87,14 @@ Only thing this can not handle right now is a checkbox style question.  Although
 | questionid | Link to the question id |
 | order | Order the option would show in (This would also be the result of the question) |
 | label | The text displayed to the user |
+
+### `roadmap`
+| Field | Description |
+|-------|-------------|
+| surveyid | Link to the survey id in the survey table |
+| questionid | Link to the question id in the questions table |
+| parent | A link to the id of the parent question id |
+| order | A numerical order to fix the order upon which the questions appear if multiple questions have the same parent
 
 ### `answers`
 | Field | Description |
