@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+
+<!------------------------------------------------------------------------------------------------>
+<head>
+<meta name="viewport" content="width=device-width, user-scalable=yes,initial-scale=1" charset="UTF-8">
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <title>Problem Discovery Survey</title>
+<!------------------------------------------------------------------------------------------------>
+  <script>
+  function showQuestion(str) {
+  if (str == "") {
+    document.getElementById("qDiv").innerHTML = "";
+    return;} 
+  else { 
+    xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function() {
+      if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {document.getElementById("qDiv").innerHTML = xmlhttp.responseText;}
+        }
+    xmlhttp.open("GET","getuser.php?q="+str,true);
+    xmlhttp.send();}
+  }
+  </script>
+</head>
+<!------------------------------------------------------------------------------------------------>
+<body>
+
+<div id = "main">
+
+
+  <h1 style = "white-space:normal;">DATABASE-DRIVEN SURVEY SANDBOX</h1>
+
+
+
+
+<form>
+<select name="users" onchange="showQuestion(this.value)">
+  <option value="">Select a Question:</option>
+  <option value="1">1</option>
+  <option value="2">2</option>
+  <option value="3">3</option>
+  <option value="4">4</option>
+  </select>
+</form>
+
+<div id="qDiv"></div>
+
+</div> <!-- end wrapper -->
+</body>
+</html>
