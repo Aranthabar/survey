@@ -59,6 +59,8 @@ This is largely a rehash of the current structure of the database but I have don
 
 Only thing this can not handle right now is a checkbox style question.  Although it is very similar to the radio option, the answer can be a multiple.  One possible way to handle that style of question is to just store the numbers of the results in a comma delimited list in the answer field.  That can always be reparsed in the future.
 
+Not sure how to factor in the require / optional questions....
+
 ### `survey`
 | Field | Description |
 |-------|-------------|
@@ -106,6 +108,27 @@ Only thing this can not handle right now is a checkbox style question.  Although
 | surveyid | Link to the survey id (Not really needed since I could get that through the questionid) |
 | answer | Answer from the site.  Always stored as text.  Numbers for the radio type questions can be reconverted |
 | date | Datetime that the question was answered |
+
+Ok, so how does all of this work together?  How about a few example tasks?
+
+#### What is the answer to a given question for a given person?
+    SELECT answer FROM answers WHERE usersname=<< username >> AND questionid=<< qid >> AND surveyid=<< sid >> AND projectid=<< pid >>
+
+#### What is the next question to answer (current question is pqid)
+    SELECT questionid FROM roadmap WHERE surveyid=<< sid >> AND parent=<< pqid >> ORDER BY order ASC
+This is not correct...
+One would have a function that would check for children that had been un-answered.  If there were it would then return the first un-answered child.  If there were no children that were un-answered, the algorithm would move one level up in the heiarchy and then perform the same check.  I do not think that can be completly done in SQL, as much as I would like for it to be.
+
+    getNextQuestion = function(qid, username, surveyid) {
+      unfinishedChildren = SELECT questionid FROM roadmap WHERE surveyid=<< surveyid >> AND parent=<< qid >> ORDER BY order ASC
+      if(length(unfinishedChildren) == 0) {
+      	qidp = SELECT parent FROM roadmap WHERE surveyid=<< surveyid >> AND questionid=<< qid >>
+        return getNextQuestion(qidp, username, surveyid)
+      } else {
+        ... Need to continue here...  
+      }
+    }
+
 
 # General Thoughts
 
