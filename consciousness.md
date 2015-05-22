@@ -32,6 +32,24 @@ Below is a list of actions that must be completed in order to be production read
  7. Author a function extract a particular question from the database and format the HTML code for display
  8. Write the code for the **next** / **save** button on the page which would transmit the results to the database and initiate the pull for the next question.
  9. Compose a landing page where the user can select which project he or she wants to fill in.
+ 10. Add the username / project identifier to the far left of the title bar
+
+# Website Concept
+
+The primary page is the index.php page which sets up the nessessry page structure using jQuery and <div> tags appropriatley.
+The left side of the page would have a column dedicated to informing the user where they are in the QA session.  Maybe the questions can have a short title that can be listed there.  Each of the questions there can be color coded base on completed, not completed but required, not completed and not required, and not completed and unknown.
+
+In addition to a QA status, the far left portion of the title region should have a small and simple username and current project identifier.
+
+The center of the index.php page is a giant div tag with the name "main".  This will be where all of the data from the server will land.
+
+When the user lands on the index.php page for the first time, the server checks for the existance of a cookie called "project".  If that cookie does not exist, it will generate that cookie with a default value of "-1" and then create another cookie called "question" with a default value of "-1".  The idea behind the cookies is that the state can be saved and the user can come back to where they were.  The far left QA status can be populated by the value of the "question" cookie.  Additionally, the server can check to see if the "project" cookie is set to "-1" and if it is, then immediatly present the user with a page giving him or her the option to select a project to answer questions for.
+
+When the user is presented with a question, a "dirty" flag somewhere hidden on the page is set to "0".  If the user alters the contents of the answer in any way, the "dirty"flag will get set to "1".  When the user clocks on any of the navigation icons, the system immeditaly checkes the status of the "dirty" variable.  If it is set to "1", then a special call is made which would transmit the results to the server.  Only then will the next quetsion or other navigation action be executed.
+
+What would be the best is if the database was updated each time the user made a change to the question.  It might be possible to do this.  We can just add a callback to the "onChange" style hook for the question.
+
+
 
 # Database Structure
 
