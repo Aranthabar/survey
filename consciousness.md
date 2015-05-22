@@ -97,7 +97,19 @@ The question category section is so that we can have a sidebar on the web page t
 
 ## Project file structure
 
-Need thoughts here...
+~~~ 
+www [Root of the website]
+  index.php [Primary landing page]
+  processAJAX.php [Page dedicated to answering the AJAX calls]
+  style.css [Basic CSS information for the index.php landing page]
+  /scripts [Directory to hold all other scripts]
+    /js [Directory to hold the JS specific files]
+      ajax.js [File to hold all of the specific client side AJAX code]
+    /php [Directory to hold the php specific files]
+      setup.php [File to load the common php environment for the each page]
+      connection.php [File to make the connection to the database]
+  /images [Directory to hold graphic media for the site]
+~~~
 
 ## Logged in User Status
 
