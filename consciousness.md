@@ -164,6 +164,4 @@ The [user manual for PHP](http://php.net/manual/en/reserved.variables.server.php
   5. [Step by step instructions for mod_auth_ntlm_winbind](http://sourceforge.net/p/adldap/discussion/500911/thread/94209498/)
 
 
-TEST
-
 
