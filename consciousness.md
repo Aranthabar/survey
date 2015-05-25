@@ -49,7 +49,15 @@ When the user is presented with a question, a "dirty" flag somewhere hidden on t
 
 What would be the best is if the database was updated each time the user made a change to the question.  It might be possible to do this.  We can just add a callback to the "onChange" style hook for the question.
 
+# Sample Program Logic Chain
 
+ 1. User lands on the page and the "onLoad" callback forces a query to the processAJAX.php routine.
+
+ 2. The processAJAX routine checks the $_COOKIE->{"program"} field (It will exist because we force it to -1 by default)
+
+ 3. If the program cookie is set to "-1" the routine will return the code nessessary for the user to select the program
+ 4. Once the user selects the program, the processAJAX will set the cookie to maintain state and set the questionid cookie to the root quetion node for the current survey.
+ 5. 
 
 # Database Structure
 
@@ -61,6 +69,10 @@ Only thing this can not handle right now is a checkbox style question.  Although
 
 Not sure how to factor in the require / optional questions....
 
+The database needs to be able to support questions about the program and questions about the individual problems for each program.  This might mean that we would need to split the answers into two seperate tables.  Ok...  I got this.
+To handle cyclic questions I add a parentid field to the answers section.  In the event that multiple answers have the same parentid, those are seperate answer streams for the same question.  The remaining question is how I link the end of the answer stream back to the original question.  I could specify a "headwater" field which would be associated with a question.  If the headwater field is blank for a quetesion, it would inherit the previous headwaters.  In the event that there is already one headwater, and another question is asked that has a headwater, then it would append the new headwater onto the headwater collection, FILO style.
+Needs to be a way to tell if a question stream is completed or not
+
 ### `survey`
 | Field | Description |
 |-------|-------------|
@@ -69,11 +81,11 @@ Not sure how to factor in the require / optional questions....
 | year | Year the survey was issued |
 | initialquestion | Id of the initial question to ask |
 
-### `projects`
+### `programs`
 | Field | Description |
 |-------|-------------|
 | id | Unique id field to act as the primary key |
-| name | Name of the project |
+| name | Name of the program |
 
 ### `questions`
 | Field | Description |
@@ -87,6 +99,7 @@ Not sure how to factor in the require / optional questions....
 |-------|-------------|
 | id  | Unique id to track as the primary key |
 | questionid | Link to the question id |
+| isHeadwater | Booline value checking to see if this is the beginning of an answerstream |
 | order | Order the option would show in (This would also be the result of the question) |
 | label | The text displayed to the user |
 
@@ -107,7 +120,9 @@ Not sure how to factor in the require / optional questions....
 | questionid | Link to the question id |
 | surveyid | Link to the survey id (Not really needed since I could get that through the questionid) |
 | answer | Answer from the site.  Always stored as text.  Numbers for the radio type questions can be reconverted |
+| parentid | Link to the answer to the previous question |
 | date | Datetime that the question was answered |
+
 
 Ok, so how does all of this work together?  How about a few example tasks?
 
