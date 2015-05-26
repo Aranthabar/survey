@@ -59,6 +59,18 @@ What would be the best is if the database was updated each time the user made a 
  4. Once the user selects the program, the processAJAX will set the cookie to maintain state and set the questionid cookie to the root quetion node for the current survey.
  5. 
 
+# Answerstream
+
+One of the core features of this application is the ability to have the end user submit multiple sets of answers, one for each problem that was discovered or is expected to affect future testing.  In order to support this feature, each answer stored in the database must be addressed with a location and a time in the universe of questions.  This can be accomplished by assigning an index to each question that begins a branch of questions based on an answer and further that answer can also be applied an additional index to track which itteration of the answer it was.
+
+Each branching quesetion (one such that a different route can be taken depending on an answer) will define the headwater.  Specifically each possible answer for that question will define a headwater id.  That headwater id will be tracked and appeneded to each future answer.  The answerstream, the collection of answers for a given series of questions, contains this list of headwater ids that define a specific pathway through the question heiarchy defined in the question roadmap.
+
+The headwater ids default to the questionid_answerorder where questionid is the assigned unique number of the question in the question datatable and the answerorder was the integer order value of the answer for that question defined in the questions_options table.  The initial head question for a survey will be given a default answerstream address of "1_1".  
+
+To determine how many results a person has given for a question, the analysts simply needs to filter the answers datatable for any entry which references the headwaterid.  They then need to simply look at the headwaterindex number for that accosiated headwater id.  The max of these will be the number of responces.
+
+To handle the infinite looping, the `next` field of the roadmap will be set to the question associated with the headwater id.
+
 # Database Structure
 
 ## Tables
