@@ -106,12 +106,12 @@ Needs to be a way to tell if a question stream is completed or not
 | type | Type of question.  Options are `radio` and `text` |
 | label | Text passed to the web page for display |
 
-### `questions_radio_options`
+### `questions_options`
 | Field | Description |
 |-------|-------------|
 | id  | Unique id to track as the primary key |
 | questionid | Link to the question id |
-| isHeadwater | Booline value checking to see if this is the beginning of an answerstream |
+| headwaterid | The assigned headwater id for this question/answer combination (default: questionid_answerorder)
 | order | Order the option would show in (This would also be the result of the question) |
 | label | The text displayed to the user |
 
@@ -120,23 +120,24 @@ Needs to be a way to tell if a question stream is completed or not
 |-------|-------------|
 | surveyid | Link to the survey id in the survey table |
 | questionid | Link to the question id in the questions table |
-| parent | A link to the id of the parent question id |
-| order | A numerical order to fix the order upon which the questions appear if multiple questions have the same parent
+| answerid | A link to the specific answer |
+| next | A one-way link to the next questionid, null means this is the last question |
 
 ### `answers`
 | Field | Description |
 |-------|-------------|
 | id | Unique id to track as the primary key |
 | username | Name of the user answering the question |
-| projectid | Link to the project the question is targeted for |
+| programid | Link to the project the question is targeted for |
 | questionid | Link to the question id |
 | surveyid | Link to the survey id (Not really needed since I could get that through the questionid) |
-| answer | Answer from the site.  Always stored as text.  Numbers for the radio type questions can be reconverted |
-| parentid | Link to the answer to the previous question |
+| headwaterid | A reference to the branching question/answer combination (colon delimited)
+| headwaterindex | A reference to the itteration count for this answerstream (colon delimited)
 | date | Datetime that the question was answered |
+| value | Answer from the site.  Always stored as text.  Numbers for the radio type questions can be reconverted |
 
 
-Ok, so how does all of this work together?  How about a few example tasks?
+Ok, so how does all of this work together?  How about a few example tasks?  **The following are all incorrect because the concepts and the database structure have been altered**
 
 #### What is the answer to a given question for a given person?
     SELECT answer FROM answers WHERE usersname=<< username >> AND questionid=<< qid >> AND surveyid=<< sid >> AND projectid=<< pid >>
